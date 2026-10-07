@@ -1,0 +1,198 @@
+\documentclass[12pt,a4paper]{article}
+
+% -------------------------------------------------
+% Paquetes
+% -------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{pgfplots}
+\usepackage{caption}
+\usepackage{array}
+
+\pgfplotsset{compat=1.18}
+\geometry{margin=2.5cm}
+
+\title{\textbf{Evaluación 1}\\
+Herramientas Computacionales para Ingeniería II\\
+\large ``Deflexión v/s Carga''}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+
+El presente informe analiza el comportamiento carga-deflexión de una viga
+simplemente apoyada sometida a una carga puntual en el centro de su luz. El
+objetivo es comparar los valores obtenidos de deflexión de forma teórico a
+través de la ecuación de Euler Bernoulli con los valores sintéticos de
+deflexión aportados por el docente en el enunciado del trabajo.
+
+\section{Desarrollo}
+
+La ecuación de Euler-Bernoulli para determinar la deflexión de una viga
+simplemente apoyada en el centro de su luz es:
+
+\begin{equation}
+\delta = \frac{P L^3}{48EI}
+\label{eq:euler}
+\end{equation}
+
+\noindent
+\textbf{Ecuación 1:} Fórmula de Euler-Bernoulli para determinar la deflexión
+en el centro de una viga de largo $L$ simplemente apoyada sometida a una
+carga puntual de magnitud $P$.
+
+Donde:
+\begin{itemize}
+    \item $I$: momento de inercia de la sección rectangular.
+    \item $E$: módulo de la elasticidad.
+\end{itemize}
+
+Antes de emplear la fórmula teórica, es importante realizar las conversiones
+pertinentes de modo que exista una coherencia dimensional. Todas las
+dimensiones se convertirán a su equivalente en el sistema internacional, es
+decir, para la fuerza se trabaja con N, para la presión/tensión en Pa y para
+unidades de longitud en m.
+
+\[
+1\,\mathrm{GPa}=25.000.000.000\,\mathrm{Pa}
+\]
+
+Esta conversión corresponde al módulo de elasticidad.
+
+\[
+1\,\mathrm{kN}=1000\,\mathrm{N}
+\]
+
+Esta conversión corresponde a las cargas aplicadas.
+
+Una vez se han realizado las conversiones establecidas, se calcula el
+momento de inercia y próximo a ello inmediatamente se pasa a calcular la
+deflexión mediante el procedimiento teórico.
+
+\begin{equation}
+I=\frac{bh^3}{12}
+\label{eq:inercia}
+\end{equation}
+
+\noindent
+\textbf{Ecuación 2:} Fórmula para determinar el momento de inercia respecto
+a su base para una sección rectangular.
+
+Con los valores obtenidos de la deflexión mediante la fórmula
+Euler-Bernoulli, se procede a calcular la diferencia relativa respecto a los
+valores sintéticos proporcionados por el docente.
+
+\section{Resultados}
+
+\begin{table}[H]
+\centering
+\caption{Resultados generales}
+\label{tab:resultados}
+\begin{tabular}{S[table-format=5.0]
+                S[table-format=1.5]
+                S[table-format=1.5]
+                S[table-format=1.1]
+                S[table-format=1.9]}
+\toprule
+{Carga [N]} & {Deflexión medida [m]} & {Deflexión teórica [m]} &
+{Diferencia relativa [\%]} & {$\delta_m/P$} \\
+\midrule
+0     & 0.00000 & 0.00000 & 0.0 & 0.000000000 \\
+5000  & 0.00026 & 0.00025 & 4.0 & 0.000000052 \\
+10000 & 0.00050 & 0.00050 & 0.0 & 0.000000050 \\
+15000 & 0.00076 & 0.00075 & 1.3 & 0.000000051 \\
+20000 & 0.00101 & 0.00100 & 1.0 & 0.000000051 \\
+25000 & 0.00128 & 0.00125 & 2.4 & 0.000000051 \\
+30000 & 0.00154 & 0.00150 & 2.7 & 0.000000051 \\
+35000 & 0.00177 & 0.00175 & 1.1 & 0.000000051 \\
+40000 & 0.00205 & 0.00200 & 2.5 & 0.000000051 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La comparación muestra que las deflexiones proporcionadas presentan una
+correspondencia cercana al modelo teórico. La mayor diferencia relativa
+corresponde a la carga de 5 kN, con un valor de 4\%. Para el resto de las
+cargas las diferencias relativas se mantienen por debajo de este valor.
+
+La relación carga deflexión se presenta en el siguiente gráfico:
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.9\textwidth,
+    height=8cm,
+    xlabel={Carga [N]},
+    ylabel={Deflexión [m]},
+    xmin=0, xmax=45000,
+    ymin=0, ymax=0.0025,
+    xtick={0,5000,10000,15000,20000,25000,30000,35000,40000},
+    ytick={0,0.0005,0.001,0.0015,0.002,0.0025},
+    grid=major,
+    legend pos=north west,
+    scaled y ticks=false,
+    yticklabel style={/pgf/number format/fixed},
+    legend cell align=left
+]
+\addplot+[mark=*] coordinates {
+    (0,0)
+    (5000,0.00026)
+    (10000,0.00050)
+    (15000,0.00076)
+    (20000,0.00101)
+    (25000,0.00128)
+    (30000,0.00154)
+    (35000,0.00177)
+    (40000,0.00205)
+};
+\addlegendentry{Deflexión medida}
+
+\addplot+[mark=square*] coordinates {
+    (0,0)
+    (5000,0.00025)
+    (10000,0.00050)
+    (15000,0.00075)
+    (20000,0.00100)
+    (25000,0.00125)
+    (30000,0.00150)
+    (35000,0.00175)
+    (40000,0.00200)
+};
+\addlegendentry{Deflexión teórica}
+\end{axis}
+\end{tikzpicture}
+\caption{Gráfico Deflexión v/s Carga}
+\label{fig:deflexion}
+\end{figure}
+
+Se observa un comportamiento aproximadamente lineal en ambas series, lo que
+resulta consistente con la expresión de Euler-Bernoulli empleada, ya que,
+manteniendo constantes $L$, $E$ e $I$ la deflexión resulta directamente
+proporcional a la carga aplicada.
+
+\section{Conclusiones}
+
+Con verificación adicional, se puede observar que la relación entre
+deflexión y carga se mantiene aproximadamente constante para los valores
+analizados. Esto constituye una comprobación independiente de la tendencia
+lineal esperada por el modelo.
+
+A grandes rasgos, los resultados muestran que la formulación teórica
+presenta de manera adecuada el comportamiento de los datos considerados.
+Sin embargo, esto puede deberse a las condiciones específicas del problema,
+ya que el modelo supone un comportamiento idealizado de la viga y los datos
+proporcionados por el docente corresponden a un caso sintético proporcionado
+con fines docentes.
+
+\end{document}
